@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE = "saksham8000/project-test-repo:${BUILD_NUMBER}"
+        GITOPS_REPO = "https://github.com/saksham157/ai-self-healing-gitops.git"
+    }
+
+    stages {
+
+        stage('Build') {
+            steps {
+                sh 'docker build -t $IMAGE .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'python app.py & sleep 3 && curl localhost:5000'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push $IMAGE
+                    '''
+                }
+            }
+        }
+
+        stage('Update GitOps Repo') {
+            steps {
+                sh '''
+                git clone $GITOPS_REPO
+                cd ai-self-healing-gitops/prod
+
+                sed -i "s|image: .*|image: $IMAGE|" deployment.yaml
+
+                git config user.email "jenkins@example.com"
+                git config user.name "jenkins"
+
+                git commit -am "update image to $IMAGE"
+                git push
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Deployment triggered via ArgoCD"
+        }
+        failure {
+            echo "❌ Pipeline failed"
+        }
+    }
+}
