@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: demo-app
-        image: your-dockerhub/project-test-repo:1
+        image: saksham8000/project-test-repo:3
         ports:
         - containerPort: 5000
