@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: demo-app
-        image: saksham8000/project-test-repo:14
+        image: saksham8000/project-test-repo:4
         ports:
         - containerPort: 5000
