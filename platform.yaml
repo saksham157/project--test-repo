@@ -4,6 +4,8 @@ team_name: payments
 
 runtime: python
 
+language: python
+
 docker_build: true
 
 pipeline:
