@@ -1,0 +1,7 @@
+service_name: payment-service
+
+team_name: payments
+
+runtime: python
+
+docker_build: true
