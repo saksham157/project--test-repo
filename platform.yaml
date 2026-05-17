@@ -1,12 +1,6 @@
-service_name: payment-service
+platform:
 
-team_name: payments
-
-runtime: python
-
-language: python
-
-docker_build: true
+  language: python
 
 pipeline:
 
@@ -15,3 +9,11 @@ pipeline:
   test: true
 
   dockerBuild: true
+
+docker:
+
+  imageTag: latest
+
+registry:
+
+  repository: saksham8000/payment-service
