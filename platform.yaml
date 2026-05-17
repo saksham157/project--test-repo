@@ -6,5 +6,10 @@ runtime: python
 
 docker_build: true
 
-build:
-  enabled: true
+pipeline:
+
+  build: true
+
+  test: true
+
+  dockerBuild: true
